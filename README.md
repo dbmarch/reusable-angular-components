@@ -51,3 +51,8 @@ In this repository you can find all material for the course
 * Practice 09 - Fun with Content (Part 4) - Customizable Toggle Button
   * [Github](https://github.com/kobi-hari-udemy/reusable-angular-components/tree/main/practice/09.%20fun-with-content-inject-button)
   * [StackBlitz](https://stackblitz.com/fork/github/kobi-hari-udemy/reusable-angular-components/tree/main/practice/09.%20fun-with-content-inject-button?title=Expander%20Component%20with%20Customizable%20Toggle%20Button&file=README.md)
+
+### Section 5 - Styling and View Encapsulation
+* Practice 10 - Fun with Content Views - Styling Projected Content and Custom Properties
+  * [Github](https://github.com/kobi-hari-udemy/reusable-angular-components/tree/main/practice/10.%20fun-with-content-views)
+  * [StackBlitz](https://stackblitz.com/fork/github/kobi-hari-udemy/reusable-angular-components/tree/main/practice/10.%20fun-with-content-views?title=Fun%20with%20View%20Encapsulation&file=README.md)
