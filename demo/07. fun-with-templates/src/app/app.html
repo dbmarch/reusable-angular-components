@@ -2,14 +2,9 @@
   <h1 [style.color]="color">{{title}}</h1>
 </ng-template>
 
-<ng-container
-  *ngTemplateOutlet="myTemplate; context: {$implicit: 'Hello', foreground: 'green'}"
-/>
+<ng-template #temp1 let-value>
+  <h1 [style.color]="value">Header 1</h1>
+  <h2>Value: {{value}}</h2>
+</ng-template>
 
-<ng-container
-  *ngTemplateOutlet="myTemplate; context: {$implicit: 'World', foreground: 'blue'}"
-/>
-
-<ng-container
-  *ngTemplateOutlet="myTemplate; context: {$implicit: 'Templates', foreground: 'purple'}"
-/>
+<app-repeater [template]="temp1"/>
