@@ -356,3 +356,47 @@ In `app.html`, try out the new directive on one of the selectors. For example, i
 
 ### Step 29
 Verify the application: the selector with the custom container should render with your custom look and feel, while the other selectors continue to use the default chip styling. Selection should still work correctly across all selectors.
+
+---
+
+## Phase 6 - Add type safety with `ngTemplateContextGuard`
+
+### Step 30
+Hover over one of the `let-` variables in `app.html` - for example, `let-color` on an `*appItemTemplate` usage, or `let-isSelected` on an `*appItemContainer` usage. Notice that the IDE's IntelliSense reports the type as **`any`**. This means there is no compile-time checking on what you do with these variables - you could misspell a property or use them incorrectly and get no warning.
+
+### Step 31
+Angular determines the type of template context variables using a special static method called **`ngTemplateContextGuard`**. When a directive defines this method, Angular's template type checker uses it to narrow the context type, giving `let-` bindings their correct types.
+
+The method signature is:
+
+```typescript
+static ngTemplateContextGuard(dir: MyDirective, ctx: unknown): ctx is MyContextType {
+  return true;
+}
+```
+
+- The first parameter is the directive instance type.
+- The second parameter is the unknown context.
+- The return type is a **type predicate** (`ctx is MyContextType`) that tells the compiler what the context actually is.
+- The body simply returns `true` - the narrowing happens at the type level, not at runtime.
+
+### Step 32
+Add `ngTemplateContextGuard` to `ItemTemplateDirective`:
+
+```typescript
+static ngTemplateContextGuard(dir: ItemTemplateDirective, ctx: unknown): ctx is ItemTemplateContext {
+  return true;
+}
+```
+
+### Step 33
+Add `ngTemplateContextGuard` to `ItemContainerDirective`:
+
+```typescript
+static ngTemplateContextGuard(dir: ItemContainerDirective, ctx: unknown): ctx is ItemContainerContext {
+  return true;
+}
+```
+
+### Step 34
+Go back to `app.html` and hover over the `let-` variables again. The IDE should now report the correct types - `string` for `let-color` on `appItemTemplate`, and `string`, `boolean`, `() => void` for the context variables on `appItemContainer`. Template expressions using these variables are now fully type-checked.
