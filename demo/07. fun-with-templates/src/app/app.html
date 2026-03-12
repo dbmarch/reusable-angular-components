@@ -1,21 +1,24 @@
 <div class="colors-area">
   <app-item-selector title="Colors" [options]="possibleColors()" [(selectedOption)]="selectedColor">
-    <ng-template appItemTemplate let-color>
-      <span [style.color]="color">{{ color }}</span>
-    </ng-template>
+    <span *appItemTemplate="let color" [style.color]="color">
+      {{ color }}
+    </span>
   </app-item-selector>
 </div>
 
 <div class="fonts-area">
   <app-item-selector title="Fonts" [options]="possibleFonts()" [(selectedOption)]="selectedFont">
-    <ng-template appItemTemplate let-value>
-      <span [style.font-family]="value">{{ value }}</span>
-    </ng-template>
+    <span *appItemTemplate="let value" [style.font-family]="value">
+		{{ value }}
+	</span>
   </app-item-selector>
 </div>
 
 <div class="sizes-area">
   <app-item-selector title="Sizes" [options]="possibleSizes()" [(selectedOption)]="selectedSize">
+	<span *appItemTemplate="let value" [style.font-size]="value">
+		{{value}}
+	</span>
   </app-item-selector>
 </div>
 
