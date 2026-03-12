@@ -1,6 +1,6 @@
 <div class="colors-area">
   <app-item-selector title="Colors" [options]="possibleColors()" [(selectedOption)]="selectedColor">
-    <ng-template let-color>
+    <ng-template appItemTemplate let-color>
       <span [style.color]="color">{{ color }}</span>
     </ng-template>
   </app-item-selector>

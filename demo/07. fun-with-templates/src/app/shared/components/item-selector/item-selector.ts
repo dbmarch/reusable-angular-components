@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, contentChild, input, model, TemplateRef } from '@angular/core';
+import { ItemTemplateDirective } from './item-template.directive';
 
 @Component({
   selector: 'app-item-selector',
@@ -20,3 +21,5 @@ export class ItemSelectorComponent {
   }
 
 }
+
+export const ItemSelector = [ItemSelectorComponent, ItemTemplateDirective];

@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { COLOR_NAMES, FONT_NAMES, SIZES } from './data/constants';
-import { ItemSelectorComponent } from './shared/components/item-selector/item-selector';
+import { ItemSelector } from './shared/components/item-selector/item-selector';
 
 @Component({
   selector: 'app-root',
-  imports: [ItemSelectorComponent],
+  imports: [ItemSelector],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
