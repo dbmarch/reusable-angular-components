@@ -1,16 +1,16 @@
 import { Directive, input } from "@angular/core";
 
-export interface MyIfContext {
-    readonly myIf: any;
+export interface MyIfContext<T> {
+    readonly myIf: T;
 }
 
 @Directive({
     selector: '[myIf]'
 })
-export class MyIf {
-    readonly myIf = input.required<any>();
+export class MyIf<T> {
+    readonly myIf = input.required<T>();
 
-    static ngTemplateContextGuard(_: MyIf, ctx: unknown): ctx is MyIfContext {
+    static ngTemplateContextGuard<T>(_: MyIf<T>, ctx: unknown): ctx is MyIfContext<T> {
         return true;
     }
 

@@ -1,7 +1,7 @@
 import { Directive, input } from "@angular/core";
 
-export interface MyForContext {
-    readonly $implicit: any;
+export interface MyForContext<T> {
+    readonly $implicit: T;
     readonly index: number;
     readonly first: boolean;
     readonly last: boolean;
@@ -9,17 +9,17 @@ export interface MyForContext {
     readonly even: boolean;
 }
 
-export type MyForTrackBy = (item: any, index: number) => any;
+export type MyForTrackBy<T> = (item: T, index: number) => any;
 
 
 @Directive({
     selector: '[myFor]'
 })
-export class MyFor {
-    readonly myForOf = input.required<any[]>();
-    readonly myForTrackBy = input<MyForTrackBy>((item, index) => item);
+export class MyFor<T> {
+    readonly myForOf = input.required<T[]>();
+    readonly myForTrackBy = input<MyForTrackBy<T>>((item, index) => item);
 
-    static ngTemplateContextGuard(_: MyFor, ctx: unknown): ctx is MyForContext {
+    static ngTemplateContextGuard<T>(_: MyFor<T>, ctx: unknown): ctx is MyForContext<T> {
         return true;
     }
 }

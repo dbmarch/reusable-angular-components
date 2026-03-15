@@ -16,5 +16,9 @@ export class App {
 
   readonly value = signal<string | null>(null);
 
-  readonly items = signal(['a', 'b', 'c']);
+  readonly items = signal([
+    {x: 10, y: 20}, 
+    {x: 20, y: 30}, 
+    {x: 50, y: 40}
+  ]);
 }
