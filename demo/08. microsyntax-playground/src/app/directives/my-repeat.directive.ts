@@ -1,10 +1,10 @@
-import { Directive, effect, input } from "@angular/core";
+import { Directive, effect, input, Signal } from "@angular/core";
 
 export interface MyRepeatContext {
-    readonly $implicit: number;
-    readonly index: number;
-    readonly first: boolean;
-    readonly last: boolean;
+    readonly $implicit: Signal<number>;
+    readonly index: Signal<number>;
+    readonly first: Signal<boolean>;
+    readonly last: Signal<boolean>;
 }
 
 @Directive({

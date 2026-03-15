@@ -1,9 +1,9 @@
-import { Directive, effect, input } from "@angular/core";
+import { Directive, effect, input, Signal } from "@angular/core";
 
 export type TimeState = 'running' | 'done';
 export interface MyTimerContext {
-    readonly value: number;
-    readonly state: TimeState;
+    readonly value: Signal<number>;
+    readonly state: Signal<TimeState>;
 }
 
 @Directive({

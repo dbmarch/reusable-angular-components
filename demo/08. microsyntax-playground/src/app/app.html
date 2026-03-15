@@ -4,7 +4,7 @@
 
 <div *myTimer="1000; from: 10; to: 0; step: -1; 
     let count = value; let status = state">
-  Count: {{ count }} ({{status}})
+  Count: {{ count() }} ({{status()}})
 </div>
 
 <div
@@ -12,7 +12,7 @@
     let value; let i = index; 
     let isFirst = first; let isLast = last"
 >
-  {{i}} - Repeating text value {{ value }}, First: {{ isFirst}}, Last: {{ isLast }}
+  {{i()}} - Repeating text value {{ value() }}, First: {{ isFirst()}}, Last: {{ isLast() }}
 </div>
 
 <ng-template 
@@ -25,6 +25,6 @@
   let-isLast="last"
   >
   <div>  
-    {{i}} - Repeating text value {{ value }}, First: {{ isFirst}}, Last: {{ isLast }}
+    {{i()}} - Repeating text value {{ value() }}, First: {{ isFirst()}}, Last: {{ isLast() }}
   </div>
 </ng-template>
