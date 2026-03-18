@@ -14,11 +14,11 @@ export class App {
   readonly step = signal(1);
 
   incrementInterval() {
-    this.int.update(v => v + 1000);
+    this.int.update(v => v + 250);
   }
 
   decrementInterval() {
-    this.int.update(v => v - 1000);
+    this.int.update(v => v - 250);
   }
 
   incrementStep() {

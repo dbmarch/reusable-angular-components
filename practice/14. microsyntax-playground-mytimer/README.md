@@ -1,160 +1,224 @@
-# Practice 13 - Microsyntax Playground (`myIf`)
+# Practice 14 - Microsyntax Playground (`myTimer`)
 
-In this exercise we will take the custom `*myIf` directive from the previous microsyntax playground and turn it into a real structural directive. We will start by learning how `TemplateRef` and `ViewContainerRef` work together to stamp out embedded views, then we will implement the actual runtime behavior of an `if` directive, and finally we will make the directive type-safe so Angular understands that values exposed through `as` are truthy inside the template.
+In this exercise we will take the custom `*myTimer` directive from the microsyntax playground and turn it into a real structural directive that exposes live timer state to the template. We will begin by modelling the timer with signals, then we will render the view with a template context, and finally we will make the directive reactive so changing the inputs creates a new timer with proper cleanup.
 
-The starting project already contains a `MyIf` directive with a required `myIf` input and a basic `MyIfContext<T>` interface. The application template uses the directive in two ways:
-- `*myIf="flag()"` to show or hide some simple content.
-- `*myIf="obj() as item"` to expose the bound object through the `as` syntax.
+The starting project already contains a `MyTimer` directive with these inputs:
+- `myTimer` for the interval in milliseconds.
+- `myTimerFrom` for the starting value.
+- `myTimerTo` for the maximum value.
+- `myTimerStep` for the increment amount.
 
-Right now the directive does not render anything because it never creates an embedded view. It also does not narrow the type of `item`, so the template currently needs non-null assertions on lines 19 and 20.
+The application template uses the directive like this:
+
+```html
+<div
+	*myTimer="int(); from: 1; to: 10; step: step(); let v = value; let s = state"
+	class="content-presenter"
+>
+	<h3>Timer Status: {{ s }}</h3>
+	<h3>Timer Value: {{ v }}</h3>
+</div>
+```
+
+Right now the directive only logs its input values. It does not create an embedded view, it does not expose any live state to the template, and it does not start a real timer when the inputs change.
 
 ---
 
-## Phase 1 - Creating Embedded Views
+## Phase 1 - Modelling Timer State With Signals
 
-In this phase we learn how a structural directive renders template content. A structural directive does not manipulate the host element directly. Instead, Angular gives it a `TemplateRef`, which represents the template to stamp out, and a `ViewContainerRef`, which is the place where those stamped views are inserted.
+In this phase we focus on the actual state machine behind the timer. The important idea is that there is only one truly stateful value here: the current timer value. Everything else can be derived from that value.
 
 ### Step 1
-Open `directives/my-if.directive.ts` and inject both `TemplateRef` and `ViewContainerRef` into the directive. You can use the `inject` function or constructor injection.
+Open `src/app/directives/my-timer.directive.ts` and add the Angular primitives you need for a structural directive and signal-based state.
 
-You should end up with access to:
-- The template that belongs to `*myIf`
-- The container that will hold the embedded views created from that template
+You will need imports for:
+- `TemplateRef`
+- `ViewContainerRef`
+- `inject`
+- `signal`
+- `computed`
 
 ### Step 2
-Use `ViewContainerRef.createEmbeddedView(...)` to create an embedded view from the injected template.
+Inject both `TemplateRef` and `ViewContainerRef` into the directive.
 
-Pass a context object when creating the view so the template can still access the value through the `myIf` context property:
+You should end up with access to:
+- The template associated with `*myTimer`
+- The container where that template will be rendered
+
+### Step 3
+Create a private writable signal called `value`. This is the one piece of mutable timer state in the directive.
+
+For now it can start at `0`:
 
 ```typescript
-this.viewContainerRef.createEmbeddedView(this.templateRef, {
-	myIf: this.myIf(),
+private readonly value = signal(0);
+```
+
+This signal will be updated over time as the timer runs.
+
+### Step 4
+Create a computed signal called `state` whose value depends on `value()` and `myTimerTo()`.
+
+The rule is:
+- If the current value is still below `myTimerTo()`, the state is `'running'`
+- If the current value has reached `myTimerTo()`, the state is `'done'`
+
+That means the timer status is derived state, not something you manually store.
+
+### Step 5
+Keep in mind what this means conceptually:
+- `value` is the single stateful signal
+- `state` is a computed projection of `value`
+
+This separation is important because it keeps the timer logic simple and avoids storing redundant state that can get out of sync.
+
+---
+
+## Phase 2 - Rendering the Template Once
+
+In this phase we build the structural directive part. Unlike `*myIf`, the presence of the view never changes here. The template should always exist exactly once, and the signals inside the context should update over time.
+
+### Step 6
+Create a `MyTimerContext` object inside the constructor and expose the signals that the template needs.
+
+The context should include:
+- `value`
+- `state`
+- `myTimer`
+- `myTimerFrom`
+
+Because the template should read these values reactively, expose them as signals rather than plain numbers.
+
+### Step 7
+When exposing `value`, pass a readonly version of the signal rather than the writable signal itself:
+
+```typescript
+value: this.value.asReadonly(),
+```
+
+This keeps the template context read-only while still allowing the directive to update the underlying state internally.
+
+### Step 8
+Use `ViewContainerRef.createEmbeddedView(...)` in the constructor to create the embedded view exactly once.
+
+For this directive, the view itself is not conditional and it does not repeat. The only thing that changes over time is the signal state inside the context.
+
+At this point the directive should render the template once, and the template should have access to the context values, even if the timer is not running yet.
+
+---
+
+## Phase 3 - Starting a New Timer When Inputs Change
+
+In this phase we make the directive reactive. Whenever any of the timer inputs change, the directive should treat that as a new timer configuration and start over from the current inputs.
+
+### Step 9
+Create an `effect` inside the constructor.
+
+This effect should read all timer inputs:
+- `myTimer()`
+- `myTimerFrom()`
+- `myTimerTo()`
+- `myTimerStep()`
+
+Because the effect reads those signals, Angular will rerun it whenever any of them change.
+
+### Step 10
+Inside the effect, first create local copies of the input values.
+
+For example:
+
+```typescript
+const interval = this.myTimer();
+const from = this.myTimerFrom();
+const to = this.myTimerTo();
+const step = this.myTimerStep();
+```
+
+This ensures the interval callback closes over a stable snapshot of the configuration for that timer run.
+
+### Step 11
+Reset the current timer value to `from` before starting the interval:
+
+```typescript
+this.value.set(from);
+```
+
+This is important because a change to any input means we are starting a fresh timer, not continuing the previous one.
+
+### Step 12
+Create a `setInterval(...)` that updates the current value by `step` on every tick.
+
+Clamp the next value so it never exceeds `to`:
+
+```typescript
+this.value.update(v => Math.min(v + step, to));
+```
+
+For this exercise you can assume all input values are positive, so you only need to handle the forward-counting case.
+
+### Step 13
+Inside the interval callback, stop the timer once the value reaches `to`.
+
+That means after updating the value, if the current value is now greater than or equal to `to`, call `clearInterval(...)`.
+
+This gives the directive the correct runtime behavior:
+- The timer starts from `from`
+- It increases by `step`
+- It never exceeds `to`
+- It stops itself when it is done
+
+### Step 14
+Verify the runtime behavior in the app:
+- The view renders immediately
+- `Timer Value` starts at `1`
+- `Timer Status` changes from `running` to `done` when the value reaches `10`
+- Clicking the interval and step buttons starts a new timer using the latest inputs
+
+---
+
+## Phase 4 - Cleaning Up Previous Intervals
+
+At this point the directive mostly works, but there is still a subtle bug. Every time the effect reruns, a new interval is created. If we do not clean up the previous interval, multiple timers will continue running at the same time.
+
+### Step 15
+Update the effect to use the cleanup callback:
+
+```typescript
+effect((onCleanup) => {
+	// timer setup
 });
 ```
 
-At this point, as soon as the directive runs, the content inside `*myIf` should appear.
+This gives you a place to tear down the previous interval before the effect runs again.
 
-### Step 3
-To understand that a `TemplateRef` can be stamped multiple times, temporarily create more than one embedded view from the same template.
-
-For example, call `createEmbeddedView(...)` several times and observe that the exact same template content is repeated multiple times in the DOM. This is the core idea behind structural directives such as loops and repeaters: one template can produce many rendered views.
-
-### Step 4
-Once you have confirmed that repeated view creation duplicates the template, reduce the code back to a single embedded view. This keeps the directive ready for the next phase, where we will control whether that one view should exist at all.
-
----
-
-## Phase 2 - Implementing the `if` Behavior
-
-In this phase we stop treating `myIf` as "always render once" and instead make the directive behave like a real conditional structural directive.
-
-### Step 5
-Create a computed signal called `condition` inside the directive. This signal should derive a boolean value from the `myIf` input.
-
-The goal is simple:
-- Truthy input value → condition is `true`
-- Falsy input value → condition is `false`
-
-This mirrors how Angular's built-in `*ngIf` interprets values.
-
-### Step 6
-Add an `effect` that reacts to `condition()` and delegates the actual DOM work to a `sync()` method.
-
-The directive should no longer directly create views in the constructor. Instead, the reactive flow should be:
-
-1. `myIf()` changes
-2. `condition()` recomputes
-3. the `effect` runs
-4. `sync()` updates the `ViewContainerRef`
-
-### Step 7
-Implement `sync()` so the container always matches the condition.
-
-The rules are:
-- If the container is empty and the condition is `true`, create one embedded view.
-- If the container is not empty and the condition is `false`, clear or remove the embedded view.
-- Otherwise, do nothing.
-
-This gives the directive the invariant of having either exactly one view or zero views.
-
-### Step 8
-When creating the embedded view inside `sync()`, keep passing the context object:
+### Step 16
+Register cleanup logic that clears the interval created by the current effect run:
 
 ```typescript
-{
-	myIf: this.myIf(),
-}
+onCleanup(() => clearInterval(id));
 ```
 
-This ensures that the `as` syntax continues to map to the value exposed by the directive.
+Now the lifecycle becomes:
+1. Inputs are read
+2. A timer is created
+3. Inputs change
+4. The old timer is cleaned up
+5. A new timer is created from the latest inputs
 
-### Step 9
-Verify the runtime behavior in the app:
-- Clicking `Toggle Flag` should show and hide the first block.
-- Clicking `Toggle Object` should show and hide the second block.
-- When the object becomes truthy again, the content should render correctly from a newly created embedded view.
+### Step 17
+Verify that changing the interval or step repeatedly does not cause overlapping timers.
 
----
-
-## Phase 3 - Narrowing the Template Type
-
-At this point the directive behaves correctly at runtime, but the template still has a type-safety issue. In `app.html`, the object block currently needs non-null assertions:
-
-```html
-X: {{item!.x}}
-Y: {{item!.y}}
-```
-
-Those `!` operators are there because Angular still thinks `item` could be `null`. But logically, that cannot happen inside the template: the block only exists when the `myIf` condition is truthy.
-
-### Step 10
-Add a binding type guard to the directive so Angular knows that the presence of the embedded view depends on the truthiness of the `myIf` input.
-
-Use the same pattern Angular uses for `NgIf`:
-
-```typescript
-static ngTemplateGuard_myIf: 'binding' = 'binding';
-```
-
-This tells Angular to treat the binding itself as the condition that guards the template.
-
-### Step 11
-Create a helper type that removes falsy values from `T`. A typical version is:
-
-```typescript
-type MyIfTruthy<T> = Exclude<T, false | 0 | '' | null | undefined>;
-```
-
-This expresses the real runtime contract of the directive: if the template exists, the value exposed through `myIf` is a truthy version of `T`.
-
-### Step 12
-Update `ngTemplateContextGuard` so it narrows the context to `MyIfContext<MyIfTruthy<T>>` instead of `MyIfContext<T>`.
-
-That means the value exposed by the `as` syntax is no longer the original possibly-null type. It is the truthy, narrowed type that is safe to use inside the block.
-
-### Step 13
-Verify that the template no longer needs the non-null assertions on lines 19 and 20 of `app.html`. After the guard is in place, you should be able to write:
-
-```html
-X: {{item.x}}
-Y: {{item.y}}
-```
-
-Angular should now understand that `item` cannot be `null` inside the `*myIf="obj() as item"` block.
-
-### Step 14
-Take note of the two pieces that work together here:
-- `ngTemplateGuard_myIf` tells Angular that the binding controls whether the template exists.
-- `ngTemplateContextGuard` tells Angular what the template context looks like when that template does exist.
-
-Together, these allow a custom structural directive to provide the same kind of template type narrowing that developers expect from Angular's built-in `*ngIf`.
+The timer should always behave as if exactly one interval is active.
 
 ---
 
 ## Expected Result
 
 By the end of the exercise:
-- `MyIf` creates and removes embedded views using `ViewContainerRef`.
-- The directive behaves like a real conditional structural directive.
-- The `as` syntax continues to work through the `myIf` context property.
-- The template type checker understands that values inside the `*myIf` block are truthy, so the non-null assertions can be removed.
+- `MyTimer` creates a single embedded view using `TemplateRef` and `ViewContainerRef`.
+- The directive exposes a template context containing live signals.
+- `value` is the single writable signal that represents timer state.
+- `state` is a computed signal derived from `value`.
+- An `effect` creates a new timer whenever the timer inputs change.
+- The timer never exceeds `myTimerTo()` and stops itself when it reaches the target.
+- Cleanup logic ensures that only one interval is active at a time.
