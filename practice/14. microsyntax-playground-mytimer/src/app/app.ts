@@ -1,23 +1,31 @@
 import { Component, signal } from '@angular/core';
-import { MyIf } from './directives/my-if.directive';
 import { CommonModule } from '@angular/common';
-import { Point } from './models/point';
+import { MyTimer } from "./directives/my-timer.directive";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, MyIf],
+  imports: [CommonModule, MyTimer],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  readonly flag = signal(true);
-  readonly obj = signal<Point | null>({x: 20, y: 30});
+  readonly int = signal(2000);
 
-  toggleFlag() {
-    this.flag.update(v => !v);
+  readonly step = signal(1);
+
+  incrementInterval() {
+    this.int.update(v => v + 1000);
   }
 
-  toggleObj() {
-    this.obj.update(v => (!!v) ? null : {x: 20, y: 30});
+  decrementInterval() {
+    this.int.update(v => v - 1000);
+  }
+
+  incrementStep() {
+    this.step.update(v => v + 1);
+  }
+
+  decrementStep() {
+    this.step.update(v => Math.max(v - 1, 1));
   }
 }
