@@ -1,4 +1,4 @@
-import { Directive, inject, Inject, input, TemplateRef, ViewContainerRef } from "@angular/core";
+import { computed, Directive, effect, inject, Inject, input, TemplateRef, ViewContainerRef } from "@angular/core";
 
 export interface MyIfContext<T> {
     readonly myIf: T;
@@ -12,13 +12,32 @@ export class MyIf<T> {
     readonly vcr = inject(ViewContainerRef);
 
     readonly myIf = input.required<T>();
+    readonly condition = computed(() => !!this.myIf());
 
     static ngTemplateContextGuard<T>(_: MyIf<T>, ctx: unknown): ctx is MyIfContext<T> {
         return true;
     }
 
+    private invalidate() {
+        const cond = this.condition();
+        if (cond) {
+            this.vcr.clear();
+            const ctx: MyIfContext<T> = {
+                myIf: this.myIf()
+            }
+            this.vcr.createEmbeddedView(this.template, ctx);
+
+        } else {
+            if (this.vcr.length > 0) {
+                this.vcr.clear();
+            }
+        }
+    }
+
     constructor() {
-        this.vcr.createEmbeddedView(this.template);
+        effect(() => {
+            this.invalidate();            
+        })
     }
 
 }
