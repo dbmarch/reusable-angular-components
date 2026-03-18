@@ -1,4 +1,4 @@
-import { Directive, effect, input, Signal } from "@angular/core";
+import { computed, Directive, effect, inject, input, signal, Signal, TemplateRef, ViewContainerRef } from "@angular/core";
 
 export type TimeState = 'running' | 'done';
 export interface MyTimerContext {
@@ -18,13 +18,24 @@ export class MyTimer {
     readonly myTimerTo = input(Infinity);
     readonly myTimerStep = input(1);
 
+    readonly template = inject<TemplateRef<MyTimerContext>>(TemplateRef);
+    readonly vcr = inject(ViewContainerRef);
+
+    private readonly value = signal(0);
+    private readonly state = computed<TimeState>(() => 
+        this.value() >= this.myTimerTo() ? 'done' : 'running');
+
     constructor() {
+        const ctx: MyTimerContext = {
+            value: this.value.asReadonly(), 
+            state: this.state, 
+            myTimer: this.myTimer, 
+            myTimerFrom: this.myTimerFrom
+        }
+        this.vcr.createEmbeddedView(this.template, ctx);
+
+
         effect(() => {
-            console.log(`MyTimer Interval: ${this.myTimer()}
-                From: ${this.myTimerFrom()}, 
-                To: ${this.myTimerTo()}
-                Step: ${this.myTimerStep()}
-            `)
         })
     }
 
