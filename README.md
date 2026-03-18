@@ -72,3 +72,6 @@ In this repository you can find all material for the course
 * Practice 13 - Microsyntax Playground - Build the *myIf* Structural Directive
   * [Github](https://github.com/kobi-hari-udemy/reusable-angular-components/tree/main/practice/13.%20microsyntax-playground-myif)
   * [StackBlitz](https://stackblitz.com/fork/github/kobi-hari-udemy/reusable-angular-components/tree/main/practice/13.%20microsyntax-playground-myif?title=Microsyntax%20Playground%20-%20Build%20the%20*myIf*%20Structural%20Directive&file=README.md) 
+* Practice 14 - Microsyntax Playground - Build the *myTimer* Structural Directive
+  * [Github](https://github.com/kobi-hari-udemy/reusable-angular-components/tree/main/practice/14.%20microsyntax-playground-mytimer)
+  * [StackBlitz](https://stackblitz.com/fork/github/kobi-hari-udemy/reusable-angular-components/tree/main/practice/14.%20microsyntax-playground-mytimer?title=Microsyntax%20Playground%20-%20Build%20the%20*myTimer*%20Structural%20Directive&file=README.md) 
