@@ -24,15 +24,14 @@ You should end up with access to:
 ### Step 2
 Use `ViewContainerRef.createEmbeddedView(...)` to create an embedded view from the injected template.
 
-Pass a context object when creating the view so the template can still access the value through the `myIf` context property:
 
 ```typescript
-this.viewContainerRef.createEmbeddedView(this.templateRef, {
-	myIf: this.myIf(),
-});
+this.viewContainerRef.createEmbeddedView(this.templateRef);
 ```
 
 At this point, as soon as the directive runs, the content inside `*myIf` should appear.
+But notice that we have an error. The second usage of `*myIf` in the template expects a context value to be passed in, but we are not providing any context when creating the embedded view. To fix this, we need to pass a context object when creating the view so the template can still access the value through the `myIf` context property. We will do that later.
+
 
 ### Step 3
 To understand that a `TemplateRef` can be stamped multiple times, temporarily create more than one embedded view from the same template.
@@ -108,17 +107,6 @@ Y: {{item!.y}}
 Those `!` operators are there because Angular still thinks `item` could be `null`. But logically, that cannot happen inside the template: the block only exists when the `myIf` condition is truthy.
 
 ### Step 10
-Add a binding type guard to the directive so Angular knows that the presence of the embedded view depends on the truthiness of the `myIf` input.
-
-Use the same pattern Angular uses for `NgIf`:
-
-```typescript
-static ngTemplateGuard_myIf: 'binding' = 'binding';
-```
-
-This tells Angular to treat the binding itself as the condition that guards the template.
-
-### Step 11
 Create a helper type that removes falsy values from `T`. A typical version is:
 
 ```typescript
@@ -127,12 +115,14 @@ type MyIfTruthy<T> = Exclude<T, false | 0 | '' | null | undefined>;
 
 This expresses the real runtime contract of the directive: if the template exists, the value exposed through `myIf` is a truthy version of `T`.
 
-### Step 12
-Update `ngTemplateContextGuard` so it narrows the context to `MyIfContext<MyIfTruthy<T>>` instead of `MyIfContext<T>`.
+### Step 11
+Update `MyIfContext` so it narrows the `myIf` property to `MyIfTruthy<T>` instead of `T`.
 
 That means the value exposed by the `as` syntax is no longer the original possibly-null type. It is the truthy, narrowed type that is safe to use inside the block.
 
-### Step 13
+You will also need to cast the value of the value passed to the context when you create it in `invalidate()`, since the directive's input is still the original `T` type. The cast is safe because of the logic in `invalidate()` that only creates the view when the value is truthy.
+
+### Step 12
 Verify that the template no longer needs the non-null assertions on lines 19 and 20 of `app.html`. After the guard is in place, you should be able to write:
 
 ```html
@@ -142,7 +132,7 @@ Y: {{item.y}}
 
 Angular should now understand that `item` cannot be `null` inside the `*myIf="obj() as item"` block.
 
-### Step 14
+### Step 13
 Take note of the two pieces that work together here:
 - `ngTemplateGuard_myIf` tells Angular that the binding controls whether the template exists.
 - `ngTemplateContextGuard` tells Angular what the template context looks like when that template does exist.
