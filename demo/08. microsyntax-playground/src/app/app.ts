@@ -1,31 +1,41 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MyTimer } from "./directives/my-timer.directive";
+import { MyRepeat } from "./directives/my-repeat.directive";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, MyTimer],
+  imports: [CommonModule, MyRepeat],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  readonly int = signal(2000);
+  readonly count = signal(5);
 
-  readonly step = signal(1);
+  readonly start = signal(0);
 
-  incrementInterval() {
-    this.int.update(v => v + 250);
+  readonly skip = signal(1);
+
+  incrementCount() {
+    this.count.update(v => v + 1);
   }
 
-  decrementInterval() {
-    this.int.update(v => v - 250);
+  decrementCount() {
+    this.count.update(v => Math.max(v - 1, 0));
   }
 
-  incrementStep() {
-    this.step.update(v => v + 1);
+  incrementSkip() {
+    this.skip.update(v => v + 1);
   }
 
-  decrementStep() {
-    this.step.update(v => Math.max(v - 1, 1));
+  decrementSkip() {
+    this.skip.update(v => Math.max(v - 1, 1));
+  }
+
+  incrementStart() {
+    this.start.update(v => v + 1);
+  }
+
+  decrementStart() {
+    this.start.update(v => v - 1);
   }
 }

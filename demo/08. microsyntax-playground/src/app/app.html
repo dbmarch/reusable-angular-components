@@ -1,26 +1,45 @@
 <h1>Structural Directives Sample</h1>
-<h2>My Timer</h2>
-<ul>
-  <div class="settings">
-    <div class="interval-setting">
-      <label>Interval</label>
-      <button (click)="decrementInterval()">-</button>
-      <span>{{ int() }}</span>
-      <button (click)="incrementInterval()">+</button>
-    </div>
-    <div class="step-setting">
-      <label>Step</label>
-      <button (click)="decrementStep()">-</button>
-      <span>{{ step() }}</span>
-      <button (click)="incrementStep()">+</button>
-    </div>
+<h2>My Repeat</h2>
+
+<section class="settings" aria-label="Repeat settings">
+  <div class="setting-card count-setting">
+    <label>Count</label>
+    <button (click)="decrementCount()">-</button>
+    <span>{{ count() }}</span>
+    <button (click)="incrementCount()">+</button>
   </div>
 
-  <div
-    *myTimer="int(); from: 1; to: 20; step: step(); let v = value; let s = state"
-    class="content-presenter"
-  >  
-    <h3>Timer Status: {{ s() }}</h3>
-    <h3>Timer Value: {{ v() }}</h3>
+  <div class="setting-card start-setting">
+    <label>Start</label>
+    <button (click)="decrementStart()">-</button>
+    <span>{{ start() }}</span>
+    <button (click)="incrementStart()">+</button>
   </div>
+
+  <div class="setting-card skip-setting">
+    <label>Skip</label>
+    <button (click)="decrementSkip()">-</button>
+    <span>{{ skip() }}</span>
+    <button (click)="incrementSkip()">+</button>
+  </div>
+</section>
+
+<ul class="results">
+  <li class="content-presenter" 
+    *myRepeat="
+      count() as c;
+      start: start();
+      skip: skip();
+      let v;
+      let i = index;
+      let f = first;
+      let l = last
+    "
+  [class.first]="f()" [class.last]="l()">
+    <span class="index">{{i()}}</span>
+    <span class="seperator">/</span>
+    <span class="count">{{c()}}</span>
+    <span class="value-label">Value</span>
+    <span class="value">{{v()}}</span>
+  </li>
 </ul>

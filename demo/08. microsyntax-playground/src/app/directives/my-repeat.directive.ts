@@ -20,10 +20,6 @@ export class MyRepeat {
 
     constructor() {
         effect(() => {
-            console.log(`My Repeat, times = ${this.myRepeat()}, 
-                start = ${this.myRepeatStart()}, 
-                skip = ${this.myRepeatSkip()}            
-            `)
         })
     }
 
