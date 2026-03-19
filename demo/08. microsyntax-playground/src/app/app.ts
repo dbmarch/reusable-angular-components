@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule } from '@angular/forms';
 import { WithDateLocale } from './directives/with-date-locale.directive';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, MatDatepickerModule, WithDateLocale],
+  imports: [CommonModule, MatDatepickerModule, FormsModule, WithDateLocale],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
