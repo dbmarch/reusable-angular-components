@@ -4,7 +4,10 @@ import {
   effect,
   inject,
   Injector,
+  inputBinding,
+  outputBinding,
   signal,
+  twoWayBinding,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
@@ -14,7 +17,6 @@ import { PRODUCTS } from './data/products.data';
 import { VIEW_OPTIONS } from './tokens/view-option.model';
 import { ProductDetailComponent } from './components/product-detail/product-detail';
 import { SelectOption } from './models/select-option.model';
-import { SelectPickerComponent } from "./pickers/select-picker/select-picker";
 import { GridViewComponent } from './views/grid-view/grid-view';
 import { VIEW_ACTIONS, ViewActions } from './tokens/view-actions.token';
 import { VIEW_PICKER } from './tokens/view-picker.token';
@@ -65,7 +67,12 @@ export class App {
 
   constructor() {
     effect(() => {
-      this.pickerVcr().createComponent(this.pickerType);
+      this.pickerVcr().createComponent(this.pickerType, {
+        bindings: [
+          inputBinding('options', this.views), 
+          twoWayBinding('value', this.selectedView)
+        ]
+      });
     })
   }
 }
