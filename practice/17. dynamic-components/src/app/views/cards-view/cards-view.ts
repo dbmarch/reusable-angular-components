@@ -1,11 +1,10 @@
-import { Component, inject, input, output } from '@angular/core';
-import { CurrencyPipe, LowerCasePipe } from '@angular/common';
+import { Component, input, output } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 import { Product } from '../../models/product.model';
-import { VIEW_ACTIONS } from '../../tokens/view-actions.token';
 
 @Component({
   selector: 'app-cards-view',
-  imports: [CurrencyPipe, LowerCasePipe],
+  imports: [CurrencyPipe],
   templateUrl: './cards-view.html',
   styleUrl: './cards-view.scss',
 })

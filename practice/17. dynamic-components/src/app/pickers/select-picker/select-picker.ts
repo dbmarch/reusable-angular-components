@@ -1,4 +1,5 @@
 import { Component, input, model } from '@angular/core';
+import { SelectOption } from '../../models/select-option.model';
 
 @Component({
   selector: 'app-select-picker',
@@ -6,7 +7,7 @@ import { Component, input, model } from '@angular/core';
   styleUrl: './select-picker.scss',
 })
 export class SelectPickerComponent {
-  options = input.required<{ label: string; value: string }[]>();
+  options = input.required<SelectOption[]>();
   value = model.required<string>();
 
   onChange(event: Event) {

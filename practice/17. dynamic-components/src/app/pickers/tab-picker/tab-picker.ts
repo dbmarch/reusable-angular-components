@@ -1,4 +1,5 @@
 import { Component, input, model } from '@angular/core';
+import { SelectOption } from '../../models/select-option.model';
 
 @Component({
   selector: 'app-tab-picker',
@@ -6,7 +7,7 @@ import { Component, input, model } from '@angular/core';
   styleUrl: './tab-picker.scss',
 })
 export class TabPickerComponent {
-  options = input.required<{ label: string; value: string }[]>();
+  options = input.required<SelectOption[]>();
   value = model.required<string>();
 
   select(val: string) {
