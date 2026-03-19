@@ -1,41 +1,23 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MyRepeat } from "./directives/my-repeat.directive";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, MyRepeat],
+  imports: [CommonModule, MatDatepickerModule, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  readonly count = signal(5);
+  readonly locales = signal([
+    'en-US',
+    'en-GB',
+    'fr-FR',
+    'de-DE',
+    'ja-JP'
+  ]);
 
-  readonly start = signal(0);
+  readonly selectedLocale = signal(this.locales()[1]);
 
-  readonly skip = signal(1);
-
-  incrementCount() {
-    this.count.update(v => v + 1);
-  }
-
-  decrementCount() {
-    this.count.update(v => Math.max(v - 1, 0));
-  }
-
-  incrementSkip() {
-    this.skip.update(v => v + 1);
-  }
-
-  decrementSkip() {
-    this.skip.update(v => Math.max(v - 1, 1));
-  }
-
-  incrementStart() {
-    this.start.update(v => v + 1);
-  }
-
-  decrementStart() {
-    this.start.update(v => v - 1);
-  }
 }

@@ -141,6 +141,35 @@
 				text-align: center;
 			}
 
+			select {
+				grid-area: value;
+				width: 100%;
+				min-height: 42px;
+				padding: 0 12px;
+				border: 1px solid var(--color-border);
+				border-radius: 9px;
+				background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), var(--color-surface-soft));
+				font: inherit;
+				font-size: 0.95rem;
+				font-weight: 700;
+				letter-spacing: -0.02em;
+				color: var(--color-heading);
+				appearance: none;
+				cursor: pointer;
+
+				&:focus-visible {
+					outline: 3px solid var(--color-panel-glow);
+					outline-offset: 3px;
+				}
+			}
+
+			&.locale-setting {
+				grid-template-columns: minmax(0, 1fr);
+				grid-template-areas:
+					"label"
+					"value";
+			}
+
 			&.start-setting {
 				border-color: var(--color-start-card-border);
 				background: linear-gradient(180deg, var(--color-start-card-bg), var(--color-card-bg));

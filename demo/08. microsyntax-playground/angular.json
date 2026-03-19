@@ -30,7 +30,10 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss", 
+              "node_modules/material-icons/iconfont/material-icons.css",
+              "node_modules/@fontsource/roboto/latin.css",
+              "node_modules/@fontsource/roboto/latin-ext.css"
             ]
           },
           "configurations": {
