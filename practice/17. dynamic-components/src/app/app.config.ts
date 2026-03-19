@@ -5,11 +5,12 @@ import { CardsViewComponent } from './views/cards-view/cards-view';
 import { TabPickerComponent } from './pickers/tab-picker/tab-picker';
 import { ViewOption, VIEW_OPTIONS } from './tokens/view-option.model';
 import { VIEW_PICKER } from './tokens/view-picker.token';
+import { SelectPickerComponent } from './pickers/select-picker/select-picker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    { provide: VIEW_PICKER, useValue: TabPickerComponent },
+    { provide: VIEW_PICKER, useValue: SelectPickerComponent },
     {
       provide: VIEW_OPTIONS,
       useValue: [

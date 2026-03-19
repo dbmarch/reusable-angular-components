@@ -1,5 +1,5 @@
-<select class="select-picker" [value]="value()" (change)="onChange($event)">
+<select class="select-picker" [(ngModel)]="value">
   @for (opt of options(); track opt.value) {
-    <option [value]="opt.value" [selected]="opt.value === value()">{{ opt.label }}</option>
+    <option [value]="opt.value">{{ opt.label }}</option>
   }
 </select>
