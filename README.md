@@ -81,3 +81,8 @@ In this repository you can find all material for the course
 * Practice 16 - Microsyntax Playground - Building a Locale-Aware Calendar Directive
   * [Github](https://github.com/kobi-hari-udemy/reusable-angular-components/tree/main/practice/16.%20microsyntax-playground-withlocale)
   * [StackBlitz](https://stackblitz.com/fork/github/kobi-hari-udemy/reusable-angular-components/tree/main/practice/16.%20microsyntax-playground-withlocale?title=Microsyntax%20Playground%20-%20Building%20a%20Locale-Aware%20Calendar%20Directive&file=README.md)
+
+### Section 10 - Dynamic Components
+* Practice 17 - Dynamic Components with `ngComponentOutlet` and `ViewContainerRef`
+  * [Github](https://github.com/kobi-hari-udemy/reusable-angular-components/tree/main/practice/17.%20dynamic-components)
+  * [StackBlitz](https://stackblitz.com/fork/github/kobi-hari-udemy/reusable-angular-components/tree/main/practice/17.%20dynamic-components?title=Dynamic%20Components%20with%20ngComponentOutlet%20and%20ViewContainerRef&file=README.md)
