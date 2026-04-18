@@ -4,10 +4,15 @@ import { Blank } from './components/blank/blank';
 
 @Component({
   selector: 'app-root',
-  imports: [HighlightDirective],
+  imports: [HighlightDirective, Blank],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
   readonly myColor = signal('magenta');
+
+  onDeactivation(timelength: number) {
+    const seconds = timelength / 1000;
+    console.log(`Highlight Deactivated after ${seconds} seconds`);
+  }
 }

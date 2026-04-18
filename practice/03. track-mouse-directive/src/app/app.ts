@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { TrackMouse } from './directives/track-mouse.directive';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [TrackMouse],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
-export class App {
-}
+export class App {}
