@@ -11,7 +11,7 @@ import {
 import { Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[highlight]',
+  selector: '[highlight5]',
   host: {
     '[style.backgroundColor]': 'bg()',
     '[style.cursor]': '"pointer"',
@@ -19,9 +19,10 @@ import { Renderer2 } from '@angular/core';
   },
 })
 export class HighlightDirective {
-  readonly color = input('', { alias: 'highlight' });
+  readonly color = input('lime');
 
-  readonly bg = linkedSignal(() => this.color() || 'lime');
+  readonly bg = linkedSignal(this.color);
+
   changeColor() {
     this.bg.set('pink');
   }

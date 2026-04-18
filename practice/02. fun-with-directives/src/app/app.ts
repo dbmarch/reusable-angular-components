@@ -4,9 +4,9 @@ import { Blank } from './components/blank/blank';
 
 @Component({
   selector: 'app-root',
-  imports: [HighlightDirective, Blank],
+  imports: [HighlightDirective],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
   readonly myColor = signal('magenta');
