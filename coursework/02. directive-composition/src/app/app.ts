@@ -1,0 +1,20 @@
+import { Component, signal } from '@angular/core';
+import { HighlightDirective } from './directives/highlight.directive';
+import { UnderlineDirective } from './directives/underline.directive';
+import { DecorateDirective } from './directives/decorate.directive';
+import { Blank } from './components/blank/blank';
+
+@Component({
+  selector: 'app-root',
+  imports: [HighlightDirective, UnderlineDirective, DecorateDirective, Blank],
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
+})
+export class App {
+  readonly myColor = signal('magenta');
+
+  onDeactivation(timelength: number) {
+    const seconds = timelength / 1000;
+    console.log(`Highlight Deactivated after ${seconds} seconds`);
+  }
+}
