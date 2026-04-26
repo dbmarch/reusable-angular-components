@@ -1,5 +1,10 @@
-import { Directive, inject } from '@angular/core';
+import { Directive, inject, InjectionToken } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+
+export const MY_LINK_ACTIVE_CLASS = new InjectionToken<string>('MY_LINK_ACTIVE_CLASS');
+export function provideMyLinkActiveClass(className: string) {
+  return { provide: MY_LINK_ACTIVE_CLASS, useValue: className };
+}
 
 @Directive({
   selector: '[myLink]',
@@ -13,7 +18,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class MyLink {
   readonly routerLink = inject(RouterLinkActive);
+  readonly className = inject(MY_LINK_ACTIVE_CLASS, { optional: true });
   constructor() {
-    this.routerLink.routerLinkActive = 'selected';
+    this.routerLink.routerLinkActive = this.className || 'selected';
   }
 }

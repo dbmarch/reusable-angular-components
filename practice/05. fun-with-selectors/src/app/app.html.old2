@@ -1,0 +1,4 @@
+<h1>Fun with Selectors</h1>
+<app-my-component />
+<h2 appMyDirective>Test header</h2>
+<p>Some text here{{ title() | myPipe }}</p>

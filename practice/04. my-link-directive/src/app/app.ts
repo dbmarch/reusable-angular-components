@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MyLink } from './directives/my-link';
+import { MyLink, provideMyLinkActiveClass } from './directives/my-link';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, MyLink],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  providers: [provideMyLinkActiveClass('chosen')],
 })
 export class App {
   protected readonly title = signal('my-link-directive');
