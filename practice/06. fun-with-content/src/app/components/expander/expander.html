@@ -11,7 +11,7 @@
   </button>
 </div>
 @if (isExpanded()) {
-  <div class="content-area">
+  <div class="content-area" animate.leave="leaves">
     {{ content() }}
   </div>
 }
