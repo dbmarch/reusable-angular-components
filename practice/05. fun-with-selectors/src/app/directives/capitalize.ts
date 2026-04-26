@@ -6,7 +6,7 @@ import { capitalizeWords } from '../utils/string.utils';
 // Where ever you include this directive. It will capitalize the text in the input when it loses focus (on blur event).
 @Directive({
   // selector: 'input[type="text"][capitals]',
-  selector: 'input[type="text"]',
+  selector: 'input[type="text"]', // Without capitals it is global!
   host: {
     '[style.border-color]': '"red"',
     '(blur)': 'capitalize($event)',
