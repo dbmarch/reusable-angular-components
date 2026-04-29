@@ -10,7 +10,7 @@
   grid-template-areas:
     'header toggle'
     'content content';
-    
+
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--expander-border-color);
@@ -18,11 +18,9 @@
   background: #fff;
   transition: grid-template-rows 300ms;
 
-  &.collapsed{
+  &.collapsed {
     grid-template-rows: min-content 0fr;
   }
-
-
 }
 
 .header-area {
@@ -67,4 +65,9 @@
     opacity: 0;
     padding-block: 0px;
   }
+}
+
+hr {
+  border: 1px solid black;
+  width: 100%;
 }

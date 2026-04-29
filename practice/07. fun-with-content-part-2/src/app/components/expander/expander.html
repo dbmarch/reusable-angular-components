@@ -11,10 +11,9 @@
   </button>
 </div>
 @if (isExpanded()) {
-  <div class="content-area"
-    animate.leave="leaves"
-    animate.enter="enters"
-  >
-    {{ content() }}
+  <div class="content-area" animate.leave="leaves" animate.enter="enters">
+    <ng-content />
+    <hr />
+    <ng-content />
   </div>
 }
