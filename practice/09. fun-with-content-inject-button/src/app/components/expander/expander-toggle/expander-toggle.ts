@@ -9,9 +9,9 @@ import { ExpanderComponent } from '../expander.component';
 })
 export class ExpanderToggleDirective {
   // This will find the next closest parent expander component and inject it into this directive
-  readonly expanderComponent = inject(ExpanderComponent);
+  readonly expanderComponent = inject(ExpanderComponent, { optional: true });
   onClick() {
     console.log('Toggle expander');
-    this.expanderComponent.toggle();
+    this.expanderComponent?.toggle();
   }
 }

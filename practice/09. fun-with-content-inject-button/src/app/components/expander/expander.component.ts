@@ -3,8 +3,8 @@ import { Component, computed, input, signal } from '@angular/core';
 @Component({
   selector: 'app-expander',
   imports: [],
-  templateUrl: './expander.html',
-  styleUrl: './expander.scss',
+  templateUrl: './expander.component.html',
+  styleUrl: './expander.component.scss',
   host: {
     '[class.collapsed]': 'isCollapsed()',
     '[class.expanded]': 'isExpanded()',

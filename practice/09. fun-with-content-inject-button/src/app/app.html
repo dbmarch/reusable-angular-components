@@ -1,6 +1,6 @@
-<app-expander>
+<app-expander #ex>
   <button expander-toggle>
-    <app-icon name="chevron" />
+    <app-icon name="chevron" [class.expanded]="ex.isExpanded()" />
   </button>
   <span expander-header>
     <app-icon name="projection" />
@@ -23,7 +23,15 @@
   </p>
 </app-expander>
 
-<app-expander>
+<app-expander #ex2>
+  <button expander-toggle>
+    @if (ex2.isExpanded()) {
+      <span> Less... </span>
+    } @else {
+      <span> More... </span>
+    }
+  </button>
+
   <span expander-header>
     <app-icon name="cogwheel" />
 
