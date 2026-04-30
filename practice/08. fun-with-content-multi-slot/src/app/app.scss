@@ -8,5 +8,14 @@
   & > * {
     width: 400px;
   }
-}
 
+  span[expander-header] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    app-icon {
+      color: var(--p-04);
+    }
+  }
+}
