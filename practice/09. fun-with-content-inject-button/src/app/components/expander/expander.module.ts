@@ -1,0 +1,11 @@
+import { NgModule } from '@angular/core';
+import { ExpanderComponent } from './expander';
+import { ExpanderToggleDirective } from './expander-toggle/expander-toggle';
+
+const exportables = [ExpanderComponent, ExpanderToggleDirective];
+@NgModule({
+  imports: [...exportables],
+  declarations: [],
+  exports: [...exportables],
+})
+export class ExpanderModule {}
