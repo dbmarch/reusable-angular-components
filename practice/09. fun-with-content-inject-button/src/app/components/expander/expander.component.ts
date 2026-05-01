@@ -1,4 +1,5 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, contentChild, effect, input, signal } from '@angular/core';
+import { ExpanderToggleComponent } from './expander-toggle/expander-toggle.component';
 
 @Component({
   selector: 'app-expander',
@@ -16,7 +17,15 @@ export class ExpanderComponent {
   readonly isExpanded = this.#isExpanded.asReadonly();
   readonly isCollapsed = computed(() => !this.isExpanded());
 
+  readonly expanderToggleComponent = contentChild(ExpanderToggleComponent);
+  readonly hasCustomToggle = computed(() => !!this.expanderToggleComponent());
   toggle() {
     this.#isExpanded.update((v) => !v);
+  }
+
+  constructor() {
+    effect(() => {
+      console.log('expanderToggleComponent', this.expanderToggleComponent());
+    });
   }
 }

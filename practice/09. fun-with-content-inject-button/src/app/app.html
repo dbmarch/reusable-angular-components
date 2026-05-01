@@ -23,15 +23,7 @@
   </p>
 </app-expander>
 
-<app-expander #ex2>
-  <button expander-toggle>
-    @if (ex2.isExpanded()) {
-      <span> Less... </span>
-    } @else {
-      <span> More... </span>
-    }
-  </button>
-
+<app-expander>
   <span expander-header>
     <app-icon name="cogwheel" />
 
@@ -57,6 +49,11 @@
     <app-icon name="modularity" />
     Composite Components</span
   >
+  <button expander-toggle>
+    <span expander-open>Less...</span>
+    <span expander-closed>More...</span>
+  </button>
+
   <h2>Composition Over Configuration</h2>
   <p>
     Composite components take reusability further by
