@@ -43,6 +43,14 @@ button[expander-toggle] {
   }
 }
 
-strong {
-  color: red;
+// strong {
+//   color: var(--expander-primary);
+// }
+
+.special {
+  --app-expander-base-color: green;
+  --app-expander-border-radius: 2px;
+  // --app-expander-header-background-color: lightcoral;
+  // --app-expander-border-color: red;
+  // --app-expander-animation-duration: 1s;
 }
