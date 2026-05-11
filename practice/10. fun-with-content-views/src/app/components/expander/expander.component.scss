@@ -1,3 +1,7 @@
+:host-context(.grayscale) {
+  --expander-primary: green;
+}
+
 :host {
   --expander-primary: #6b45bf;
   --expander-primary-light: color-mix(in srgb, var(--expander-primary) 15%, white);
@@ -10,7 +14,7 @@
   grid-template-areas:
     'header toggle'
     'content content';
-    
+
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--expander-border-color);
@@ -18,11 +22,9 @@
   background: #fff;
   transition: grid-template-rows 300ms;
 
-  &.collapsed{
+  &.collapsed {
     grid-template-rows: min-content 0fr;
   }
-
-
 }
 
 .header-area {

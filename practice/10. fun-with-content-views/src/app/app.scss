@@ -8,6 +8,12 @@
   & > * {
     width: 400px;
   }
+
+  .grayscale {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
 span[expander-header] {
@@ -35,4 +41,8 @@ button[expander-toggle] {
       transform: rotate(180deg);
     }
   }
+}
+
+strong {
+  color: red;
 }
